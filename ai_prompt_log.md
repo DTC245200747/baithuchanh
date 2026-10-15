@@ -1,14 +1,11 @@
-# Nhật ký tương tác AI – HealthSync
+# Nhật ký trao đổi AI – AutoRide
 
-> Ghi chú: Đây là nhật ký tham khảo dựa trên các câu hỏi đã được trao đổi trong cuộc trò chuyện. Hãy chỉnh sửa để phản ánh đúng các prompt bạn thực sự sử dụng khi thực hành.
+> Ghi chép mẫu để tham khảo. Hãy chỉnh sửa theo các câu hỏi bạn thực sự đã trao đổi, không nộp nguyên văn nếu không phản ánh quá trình làm bài.
 
-| STT | Câu hỏi thảo luận | Kiến thức rút ra | Quyết định thiết kế |
-|---|---|---|---|
-| 1 | Vì sao dùng `is_active BOOLEAN` cho lịch hẹn đa trạng thái là không phù hợp? | Boolean chỉ có hai trạng thái, không phản ánh đầy đủ vòng đời. | Dùng `ENUM('PENDING','CONFIRMED','CHECKED_IN','COMPLETED','CANCELLED')`. |
-| 2 | Nên dùng `FLOAT`, `DOUBLE` hay `DECIMAL` để lưu tiền cọc và phí phạt? | Kiểu dấu phẩy động có sai số biểu diễn; `DECIMAL` phù hợp số tiền cần đối soát. | Dùng `DECIMAL(12,2)` và `CHECK` không âm. |
-| 3 | Khóa ngoại có ngăn được việc kê đơn cho lịch chưa khám xong không? | Khóa ngoại chỉ kiểm tra lịch hẹn tồn tại, không kiểm tra trạng thái. | Dùng `BEFORE INSERT` trigger và `SIGNAL SQLSTATE '45000'`. |
-| 4 | Khi sửa bảng cũ bằng `ALTER TABLE`, cần chú ý gì? | Không xóa `is_active` trước khi chuyển dữ liệu; nên sao lưu và kiểm thử trên bản sao. | Thêm cột mới, chuyển dữ liệu, kiểm tra, sau đó mới xóa cột cũ. |
-
-## Tự đánh giá
-
-AI được dùng để giải thích lựa chọn kiểu dữ liệu, cú pháp và rủi ro toàn vẹn. Người học cần tự kiểm tra kết quả SQL trên MySQL 8.0+ và có khả năng giải thích từng ràng buộc khi vấn đáp.
+| Câu hỏi kỹ thuật | Kiến thức rút ra | Quyết định thiết kế |
+|---|---|---|
+| Vì sao tiền cọc và phí phạt nên dùng DECIMAL thay vì FLOAT? | FLOAT có sai số biểu diễn nhị phân; DECIMAL phù hợp dữ liệu tài chính. | Dùng DECIMAL(12,2) cho ba khoản tiền. |
+| Nên thiết kế Rentals–Inspections là 1-1 hay 1-N? | 1-N cho phép lưu nhiều biên bản kiểm tra theo thời gian; 1-1 phù hợp nếu chỉ có một biên bản cuối cùng. | Chọn 1-N và khóa ngoại rental_id. |
+| ON DELETE RESTRICT có ý nghĩa gì? | Chặn xóa hợp đồng nếu đã có biên bản kiểm tra liên quan, bảo vệ lịch sử đối soát. | Dùng ON DELETE RESTRICT. |
+| Nếu tiền cọc hoặc phí bị NULL thì tính hoàn trả ra sao? | Phép trừ với NULL trả về NULL; cần NOT NULL DEFAULT 0 hoặc COALESCE. | Dùng NOT NULL DEFAULT 0. |
+| ENUM có chặn việc kiểm tra xe khi hợp đồng BOOKED không? | ENUM chỉ giới hạn tập giá trị; quy tắc liên bảng cần logic ứng dụng hoặc trigger. | Đề xuất trigger BEFORE INSERT cho Inspections nếu triển khai nâng cao. |

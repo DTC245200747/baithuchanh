@@ -1,34 +1,18 @@
-# Bài tập: Xây dựng cơ sở dữ liệu quản lý bán hàng
+# AutoRide – Bài tập đối chiếu UML và ERD
 
-**CSDL:** `QuanLyBanHang` — **Hệ quản trị:** MySQL 8.0+
-
-## Các bảng
-
-| Bảng | Chức năng | Khóa chính | Khóa ngoại |
-|---|---|---|---|
-| Customer | Lưu khách hàng, kể cả người chưa mua | cID | — |
-| Orders | Lưu hóa đơn mua hàng | oID | cID → Customer |
-| Product | Lưu sản phẩm | pID | — |
-| OrderDetail | Lưu sản phẩm và số lượng theo hóa đơn | (oID, pID) | oID → Orders, pID → Product |
-
-## Quan hệ
-
-- `Customer (1) → (N) Orders`: Một khách hàng có thể có nhiều hóa đơn; khách chưa mua có 0 hóa đơn.
-- `Orders (1) → (N) OrderDetail`: Một hóa đơn có nhiều dòng hàng.
-- `Product (1) → (N) OrderDetail`: Một sản phẩm có thể xuất hiện trong nhiều hóa đơn.
-- `odQTY > 0`: Số lượng sản phẩm trong một dòng hóa đơn là số nguyên dương.
+## File nộp
+- `autoride_db.sql`: MySQL DDL/DML, nâng cấp từ legacy bằng ALTER TABLE, kiểm thử và đối soát.
+- `er_activity_mapping.md`: phân tích chênh lệch nghiệp vụ–dữ liệu dưới 200 từ.
+- `ai_prompt_log.md`: mẫu nhật ký kỹ thuật; cần cá nhân hóa theo quá trình thực tế.
 
 ## Cách chạy
+1. Mở MySQL Workbench kết nối MySQL 8.0.16+.
+2. Chạy `autoride_db.sql` trên môi trường thử nghiệm chưa có bảng AutoRide.
+3. Xem kết quả SELECT cuối: `refundable_amount = 8000000.00`.
+4. Chụp màn hình kết quả và kiểm tra khóa ngoại `Inspections.rental_id`.
 
-1. Mở MySQL Workbench, kết nối MySQL Server.
-2. Mở `QuanLyBanHang.sql`, chọn chạy toàn bộ script.
-3. Kiểm tra `SHOW TABLES;` trả về 4 bảng.
-4. Kiểm tra `SHOW CREATE TABLE OrderDetail;` để xem khóa chính ghép và khóa ngoại.
-
-## Lưu ý về đề
-
-Ảnh ERD trên CodeGym không truy cập được trong lúc tạo bài, nên script dùng các trường thường gặp trong mẫu bài: `Customer(cID,cName,cAge)`, `Orders(oID,cID,oDate,oTotalPrice)`, `Product(pID,pName,pPrice)`, `OrderDetail(oID,pID,odQTY)`. Nếu ảnh gốc khác về tên cột/kiểu dữ liệu, cần chỉnh theo ảnh trước khi nộp.
-
-Trong MySQL, `ORDER` là từ khóa, vì vậy script dùng tên bảng `Orders`. Nếu đề yêu cầu chính xác tên `Order`, hãy dùng dấu backtick: `` `Order` `` ở mọi câu lệnh.
-
-`oTotalPrice` được lưu trong bảng Orders để tương thích cấu trúc bài học, nhưng trong hệ thống thực tế cần đồng bộ với tổng `odQTY * pPrice` khi thêm/sửa chi tiết hóa đơn. Bài tập chỉ yêu cầu DDL, chưa triển khai logic đồng bộ này.
+## Ghi chú
+- Script mô phỏng legacy rồi nâng cấp bằng ALTER TABLE, không xóa dữ liệu cũ.
+- Không chạy lại toàn bộ trên cùng database vì các cột mới đã tồn tại.
+- Để kiểm soát chuyển trạng thái và ngăn kiểm tra khi BOOKED cần trigger hoặc logic ứng dụng.
+- Bài nộp yêu cầu tự phân tích và sử dụng AI đúng quy định của giảng viên; đọc hiểu và điều chỉnh trước khi nộp.
