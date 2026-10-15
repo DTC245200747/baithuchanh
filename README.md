@@ -1,12 +1,21 @@
-# Thực hành: Tạo bảng trong CSDL — QuanLyDiemThi
+# Thực hành: Tạo CSDL quản lý sinh viên
 
-- `index.html`: Bài báo cáo HTML có sơ đồ các bảng, giải thích quan hệ và SQL.
-- `QuanLyDiemThi.sql`: SQL tạo cơ sở dữ liệu và bốn bảng, khóa chính/khóa ngoại (MySQL).
+Bài thực hành CodeGym sử dụng MySQL 8.0+.
 
-## Chạy SQL
-Mở MySQL Workbench hoặc phpMyAdmin, chạy nội dung `QuanLyDiemThi.sql` trong cơ sở dữ liệu MySQL chưa có các bảng trùng tên.
+## Nội dung
+- Tạo database `QuanLySinhVien`.
+- Tạo bảng `Class`, `Student`, `Subject`, `Mark`.
+- Đầy đủ PRIMARY KEY, AUTO_INCREMENT, FOREIGN KEY, NOT NULL, DEFAULT, CHECK, UNIQUE.
 
-## Đăng GitHub Pages
-Tạo repository public, upload các file ở thư mục gốc. Vào Settings → Pages → Deploy from a branch → main → /(root) → Save.
+## Hướng dẫn chạy
+1. Mở MySQL Workbench, kết nối MySQL.
+2. Mở `QuanLySinhVien.sql` và thực thi toàn bộ.
+3. Chạy `USE QuanLySinhVien; SHOW TABLES;` để kiểm tra.
+4. Chạy `SHOW CREATE TABLE Mark;` để kiểm tra các ràng buộc.
 
-Lưu ý: ví dụ CodeGym ghi MaMH VARCHAR(20) ở bước 4, nhưng bảng đặc tả ghi VARCHAR(50). Bài này dùng VARCHAR(50) nhất quán.
+## Quan hệ
+- `Class` (1) — (N) `Student`
+- `Student` (1) — (N) `Mark`
+- `Subject` (1) — (N) `Mark`
+
+Lưu ý: UNIQUE(SubID, StudentID) là theo đề, nên không lưu được nhiều lần thi cho cùng một cặp sinh viên–môn học.

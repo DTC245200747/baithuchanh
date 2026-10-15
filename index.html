@@ -1,47 +1,41 @@
-<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Thực hành: Tạo bảng trong CSDL | QuanLyDiemThi</title><style>
-:root{--ink:#14243b;--blue:#2558aa;--bg:#f3f6fc;--line:#d9e3f1}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,'Segoe UI',sans-serif}header{background:linear-gradient(120deg,#102b56,#2c62ac);color:white;padding:55px max(24px,calc((100vw - 1050px)/2))}header p{opacity:.85}h1{font-size:clamp(28px,4vw,42px);line-height:1.2;margin:10px 0}h2{color:#153c79;margin-top:0}h3{color:#254b86}.wrap{max-width:1050px;margin:30px auto;padding:0 20px}section{background:white;border:1px solid var(--line);border-radius:16px;padding:26px;margin:22px 0;box-shadow:0 5px 22px #18325c0a}.tag{display:inline-block;border-radius:99px;padding:4px 12px;background:#dbeaff;color:#164687;font-size:13px;font-weight:700}table{border-collapse:collapse;width:100%;font-size:14px}th,td{border-bottom:1px solid #e2e8f2;padding:10px;text-align:left}th{background:#eff5ff;color:#21467d}.scroll{overflow:auto}.pk{color:#a45600;font-weight:700}.fk{color:#2562b4;font-weight:700}pre{background:#101a2d;color:#e7eefb;padding:22px;overflow:auto;border-radius:12px;font:13px/1.7 Consolas,monospace}button,a.btn{border:0;background:#2563b6;color:white;border-radius:9px;padding:11px 16px;cursor:pointer;text-decoration:none;display:inline-block;font-weight:650}.diagram{overflow:auto;padding:12px;border:1px solid #e0e8f5;border-radius:12px;background:#f8fbff}.diagram svg{min-width:760px;display:block;margin:auto}.note{padding:12px 16px;border-left:4px solid #3b73c5;background:#f0f6ff;border-radius:6px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:700px){.cols{grid-template-columns:1fr}section{padding:18px}}@media print{header{padding:20px;color:black;background:white}body{background:white}section{break-inside:avoid;box-shadow:none}.no-print{display:none}}
-</style></head><body><header><span class="tag">BÀI THỰC HÀNH • CƠ SỞ DỮ LIỆU</span><h1>Tạo bảng trong CSDL</h1><p>Đề tài: Thiết kế và tạo cơ sở dữ liệu <strong>QuanLyDiemThi</strong> bằng SQL (MySQL)</p></header><main class="wrap"><section><h2>1. Mục tiêu và yêu cầu</h2><p>Tạo cơ sở dữ liệu <strong>QuanLyDiemThi</strong> gồm bốn bảng <strong>HocSinh</strong>, <strong>GiaoVien</strong>, <strong>MonHoc</strong> và <strong>BangDiem</strong>. Khai báo đầy đủ các khóa chính, khóa ngoại và quan hệ giữa các bảng bằng câu lệnh SQL.</p><p class="note">Quy ước: <strong>PK</strong> = khóa chính; <strong>FK</strong> = khóa ngoại. Bảng <strong>BangDiem</strong> sử dụng khóa chính tổ hợp (MaHS, MaMH).</p></section>
-<section><h2>2. Cấu trúc bốn bảng</h2><div id="tables"></div></section>
-<section><h2>3. Sơ đồ quan hệ các bảng</h2><p>Một giáo viên có thể phụ trách nhiều môn học; một học sinh có nhiều bản ghi điểm; một môn học có nhiều bản ghi điểm. <strong>BangDiem</strong> là bảng trung gian biểu diễn quan hệ nhiều–nhiều giữa học sinh và môn học.</p><div class="diagram"><svg viewBox="0 0 930 500" width="930" height="500" role="img" aria-label="Sơ đồ bốn bảng và các quan hệ khóa ngoại"><defs><marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#4375bd"/></marker></defs><g stroke="#4375bd" stroke-width="2.5" fill="none"><path d="M230 165 H335 V335 H375" marker-end="url(#arr)"/><path d="M705 165 H595 V335 H555" marker-end="url(#arr)"/><path d="M705 165 V225 H680 V315" marker-end="url(#arr)"/></g><g font-size="14" fill="#305c9b"><text x="253" y="156">1 : N</text><text x="620" y="156">1 : N</text><text x="711" y="239">1 : N</text></g><g font-family="Segoe UI, sans-serif" font-size="16"><g><rect x="30" y="25" width="270" height="160" rx="10" fill="white" stroke="#83a4d4" stroke-width="2"/><path d="M30 35 Q30 25 40 25 H290 Q300 25 300 35 V65 H30Z" fill="#1d4f94"/><text x="45" y="51" fill="white" font-weight="bold">HocSinh</text><text x="45" y="91">🔑 MaHS VARCHAR(20) PK</text><text x="45" y="117">TenHS, NgaySinh</text><text x="45" y="143">Lop, GT</text></g><g><rect x="630" y="25" width="270" height="160" rx="10" fill="white" stroke="#83a4d4" stroke-width="2"/><path d="M630 35 Q630 25 640 25 H890 Q900 25 900 35 V65 H630Z" fill="#1d4f94"/><text x="645" y="51" fill="white" font-weight="bold">GiaoVien</text><text x="645" y="91">🔑 MaGV VARCHAR(20) PK</text><text x="645" y="117">TenGV, SDT</text></g><g><rect x="630" y="300" width="270" height="165" rx="10" fill="white" stroke="#83a4d4" stroke-width="2"/><path d="M630 310 Q630 300 640 300 H890 Q900 300 900 310 V340 H630Z" fill="#1d4f94"/><text x="645" y="326" fill="white" font-weight="bold">MonHoc</text><text x="645" y="366">🔑 MaMH VARCHAR(50) PK</text><text x="645" y="392">TenMH</text><text x="645" y="418">MaGV VARCHAR(20) FK</text></g><g><rect x="310" y="300" width="270" height="165" rx="10" fill="white" stroke="#83a4d4" stroke-width="2"/><path d="M310 310 Q310 300 320 300 H570 Q580 300 580 310 V340 H310Z" fill="#1d4f94"/><text x="325" y="326" fill="white" font-weight="bold">BangDiem</text><text x="325" y="366">🔑 MaHS PK, FK</text><text x="325" y="392">🔑 MaMH PK, FK</text><text x="325" y="418">DiemThi, NgayKT</text></g></g></svg></div><p class="note">Các quan hệ FK: MonHoc.MaGV → GiaoVien.MaGV; BangDiem.MaHS → HocSinh.MaHS; BangDiem.MaMH → MonHoc.MaMH.</p></section>
-<section><h2>4. Câu lệnh SQL hoàn chỉnh</h2><p>Thứ tự tạo bảng đảm bảo bảng được tham chiếu tồn tại trước khi khai báo khóa ngoại. Có thể chạy toàn bộ trong MySQL Workbench hoặc phpMyAdmin.</p><button class="no-print" onclick="navigator.clipboard.writeText(document.getElementById('sql').textContent).then(()=>alert('Đã sao chép SQL'))">Sao chép SQL</button> <a class="btn no-print" href="QuanLyDiemThi.sql" download>Tải file .sql</a><pre id="sql"></pre><p class="note">Đề bài mô tả MaMH là VARCHAR(50) nhưng ví dụ ở bước 4 ghi VARCHAR(20). Bài làm sử dụng VARCHAR(50) thống nhất ở MonHoc và BangDiem theo bảng mô tả.</p></section>
-<section><h2>5. Kiểm tra kết quả</h2><p>Sau khi chạy mã SQL, dùng <code>SHOW TABLES;</code> để kiểm tra có đủ bốn bảng. Dùng <code>SHOW CREATE TABLE BangDiem;</code> và <code>SHOW CREATE TABLE MonHoc;</code> để xác minh khóa chính và khóa ngoại.</p><div class="scroll"><table><thead><tr><th>Bảng</th><th>Khóa chính</th><th>Khóa ngoại</th></tr></thead><tbody><tr><td>HocSinh</td><td>MaHS</td><td>Không có</td></tr><tr><td>GiaoVien</td><td>MaGV</td><td>Không có</td></tr><tr><td>MonHoc</td><td>MaMH</td><td>MaGV → GiaoVien</td></tr><tr><td>BangDiem</td><td>(MaHS, MaMH)</td><td>MaHS → HocSinh; MaMH → MonHoc</td></tr></tbody></table></div><p><strong>Kết luận:</strong> Mã SQL đáp ứng yêu cầu tạo bốn bảng và thiết lập quan hệ khóa chính/khóa ngoại. Đây là mã nguồn và mô hình dự kiến; kết quả thực thi thực tế cần được kiểm tra trong MySQL.</p></section><section><h2>6. Tài liệu tham khảo</h2><p>Đề thực hành CodeGym: <a href="https://github.com/codegym-vn/jwbd-2023-sql-create-table" target="_blank" rel="noopener">jwbd-2023-sql-create-table</a> (nhánh dev theo hướng dẫn).</p></section></main><script>
-const tables=[['HocSinh',[['MaHS','VARCHAR(20)','PK'],['TenHS','VARCHAR(50)',''],['NgaySinh','DATETIME',''],['Lop','VARCHAR(20)',''],['GT','VARCHAR(20)','']]],['GiaoVien',[['MaGV','VARCHAR(20)','PK'],['TenGV','VARCHAR(50)',''],['SDT','VARCHAR(10)','']]],['MonHoc',[['MaMH','VARCHAR(50)','PK'],['TenMH','VARCHAR(50)',''],['MaGV','VARCHAR(20)','FK → GiaoVien.MaGV']]],['BangDiem',[['MaHS','VARCHAR(20)','PK, FK → HocSinh.MaHS'],['MaMH','VARCHAR(50)','PK, FK → MonHoc.MaMH'],['DiemThi','INT',''],['NgayKT','DATETIME','']]]];document.getElementById('tables').innerHTML=tables.map(([name,rows])=>`<h3>${name}</h3><div class="scroll"><table><thead><tr><th>Trường</th><th>Kiểu dữ liệu</th><th>Ràng buộc</th></tr></thead><tbody>${rows.map(([n,t,k])=>`<tr><td>${n}</td><td>${t}</td><td>${k}</td></tr>`).join('')}</tbody></table></div>`).join('');const sql=`CREATE DATABASE IF NOT EXISTS QuanLyDiemThi CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE QuanLyDiemThi;
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Quản lý sinh viên - CodeGym</title><style>body{font:16px/1.65 system-ui,Arial;background:#f1f5fb;color:#1b2d47;margin:0}header{background:#164577;color:white;padding:45px max(20px,calc((100vw - 950px)/2))}main{max-width:950px;margin:28px auto;padding:0 20px}section{background:white;padding:25px;border:1px solid #dae4f0;border-radius:13px;margin:20px 0}h1{margin:0}h2,h3{color:#164577}table{width:100%;border-collapse:collapse;margin-bottom:20px}th,td{border:1px solid #d5dfec;padding:9px;text-align:left}th{background:#eaf2fd}.scroll{overflow-x:auto}pre{background:#11243b;color:#e7f2ff;padding:20px;overflow:auto;border-radius:9px}a{color:#1557a0}.er{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.node{border:2px solid #3475b7;border-radius:8px;padding:13px;background:#eaf3ff;min-width:125px;text-align:center}.arr{font-weight:bold;color:#3475b7}footer{text-align:center;padding:24px}</style></head><body><header><small>THỰC HÀNH CODEGYM • MYSQL</small><h1>Tạo CSDL quản lý sinh viên</h1><p>Cơ sở dữ liệu QuanLySinhVien • 4 bảng • Đầy đủ ràng buộc</p></header><main><section><h2>1. Mục tiêu</h2><p>Tạo cơ sở dữ liệu và bảng bằng câu lệnh SQL, sử dụng khóa chính, khóa ngoại, tự tăng, NOT NULL, DEFAULT, CHECK và UNIQUE.</p></section><section><h2>2. Cấu trúc 4 bảng</h2><div class="scroll"><h3>Class</h3><table><thead><tr><th>Trường</th><th>Kiểu dữ liệu</th><th>Ràng buộc</th></tr></thead><tbody><tr><td>ClassID</td><td>INT</td><td>PK, AUTO_INCREMENT, NOT NULL</td></tr><tr><td>ClassName</td><td>VARCHAR(60)</td><td>NOT NULL</td></tr><tr><td>StartDate</td><td>DATETIME</td><td>NOT NULL</td></tr><tr><td>Status</td><td>BIT</td><td></td></tr></tbody></table><h3>Student</h3><table><thead><tr><th>Trường</th><th>Kiểu dữ liệu</th><th>Ràng buộc</th></tr></thead><tbody><tr><td>StudentID</td><td>INT</td><td>PK, AUTO_INCREMENT, NOT NULL</td></tr><tr><td>StudentName</td><td>VARCHAR(30)</td><td>NOT NULL</td></tr><tr><td>Address</td><td>VARCHAR(50)</td><td></td></tr><tr><td>Phone</td><td>VARCHAR(20)</td><td></td></tr><tr><td>Status</td><td>BIT</td><td></td></tr><tr><td>ClassID</td><td>INT</td><td>NOT NULL, FK → Class</td></tr></tbody></table><h3>Subject</h3><table><thead><tr><th>Trường</th><th>Kiểu dữ liệu</th><th>Ràng buộc</th></tr></thead><tbody><tr><td>SubID</td><td>INT</td><td>PK, AUTO_INCREMENT, NOT NULL</td></tr><tr><td>SubName</td><td>VARCHAR(30)</td><td>NOT NULL</td></tr><tr><td>Credit</td><td>TINYINT</td><td>NOT NULL, DEFAULT 1, CHECK &gt;= 1</td></tr><tr><td>Status</td><td>BIT</td><td>DEFAULT 1</td></tr></tbody></table><h3>Mark</h3><table><thead><tr><th>Trường</th><th>Kiểu dữ liệu</th><th>Ràng buộc</th></tr></thead><tbody><tr><td>MarkID</td><td>INT</td><td>PK, AUTO_INCREMENT, NOT NULL</td></tr><tr><td>SubID</td><td>INT</td><td>NOT NULL, FK → Subject</td></tr><tr><td>StudentID</td><td>INT</td><td>NOT NULL, FK → Student</td></tr><tr><td>Mark</td><td>FLOAT</td><td>DEFAULT 0, CHECK 0–100</td></tr><tr><td>ExamTimes</td><td>TINYINT</td><td>DEFAULT 1</td></tr><tr><td>(SubID, StudentID)</td><td>—</td><td>UNIQUE</td></tr></tbody></table></div></section><section><h2>3. Sơ đồ quan hệ</h2><div class="er"><div class="node"><b>Class</b><div>ClassID (PK)</div></div><span class="arr">1 → N</span><div class="node"><b>Student</b><div>StudentID (PK)</div><div>ClassID (FK)</div></div><span class="arr">1 → N</span><div class="node"><b>Mark</b><div>MarkID (PK)</div><div>StudentID (FK)</div><div>SubID (FK)</div></div><span class="arr">N ← 1</span><div class="node"><b>Subject</b><div>SubID (PK)</div></div></div><p>Mark là bảng ghi điểm nối sinh viên với môn học. Ràng buộc UNIQUE(SubID, StudentID) đảm bảo mỗi cặp chỉ có một bản ghi điểm.</p></section><section><h2>4. Mã SQL</h2><p><a href="QuanLySinhVien.sql">Tải file QuanLySinhVien.sql</a> để chạy bằng MySQL Workbench.</p><pre><code>CREATE DATABASE IF NOT EXISTS QuanLySinhVien CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE QuanLySinhVien;
 
-CREATE TABLE HocSinh (
-    MaHS VARCHAR(20) PRIMARY KEY,
-    TenHS VARCHAR(50),
-    NgaySinh DATETIME,
-    Lop VARCHAR(20),
-    GT VARCHAR(20)
+CREATE TABLE Class (
+ ClassID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ ClassName VARCHAR(60) NOT NULL,
+ StartDate DATETIME NOT NULL,
+ Status BIT
 );
 
-CREATE TABLE GiaoVien (
-    MaGV VARCHAR(20) PRIMARY KEY,
-    TenGV VARCHAR(50),
-    SDT VARCHAR(10)
+CREATE TABLE Student (
+ StudentID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ StudentName VARCHAR(30) NOT NULL,
+ Address VARCHAR(50),
+ Phone VARCHAR(20),
+ Status BIT,
+ ClassID INT NOT NULL,
+ CONSTRAINT FK_Student_Class FOREIGN KEY (ClassID) REFERENCES Class(ClassID)
 );
 
-CREATE TABLE MonHoc (
-    MaMH VARCHAR(50) PRIMARY KEY,
-    TenMH VARCHAR(50),
-    MaGV VARCHAR(20),
-    CONSTRAINT FK_MonHoc_GiaoVien FOREIGN KEY (MaGV) REFERENCES GiaoVien(MaGV)
+CREATE TABLE Subject (
+ SubID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ SubName VARCHAR(30) NOT NULL,
+ Credit TINYINT NOT NULL DEFAULT 1 CHECK (Credit &gt;= 1),
+ Status BIT DEFAULT b&#x27;1&#x27;
 );
 
-CREATE TABLE BangDiem (
-    MaHS VARCHAR(20),
-    MaMH VARCHAR(50),
-    DiemThi INT,
-    NgayKT DATETIME,
-    PRIMARY KEY (MaHS, MaMH),
-    CONSTRAINT FK_BangDiem_HocSinh FOREIGN KEY (MaHS) REFERENCES HocSinh(MaHS),
-    CONSTRAINT FK_BangDiem_MonHoc FOREIGN KEY (MaMH) REFERENCES MonHoc(MaMH)
+CREATE TABLE Mark (
+ MarkID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ SubID INT NOT NULL,
+ StudentID INT NOT NULL,
+ Mark FLOAT DEFAULT 0 CHECK (Mark BETWEEN 0 AND 100),
+ ExamTimes TINYINT DEFAULT 1,
+ CONSTRAINT UQ_Mark_Sub_Student UNIQUE (SubID, StudentID),
+ CONSTRAINT FK_Mark_Subject FOREIGN KEY (SubID) REFERENCES Subject(SubID),
+ CONSTRAINT FK_Mark_Student FOREIGN KEY (StudentID) REFERENCES Student(StudentID)
 );
 
 SHOW TABLES;
-SHOW CREATE TABLE HocSinh;
-SHOW CREATE TABLE GiaoVien;
-SHOW CREATE TABLE MonHoc;
-SHOW CREATE TABLE BangDiem;`;document.getElementById('sql').textContent=sql;
-</script></body></html>
+SHOW CREATE TABLE Mark;
+</code></pre></section><section><h2>5. Kiểm tra và nộp bài</h2><p>Mở MySQL Workbench, chạy toàn bộ file SQL. Dùng <code>SHOW TABLES;</code> để kiểm tra đủ 4 bảng và <code>SHOW CREATE TABLE Mark;</code> để kiểm tra khóa ngoại, CHECK và UNIQUE.</p><p>Đưa thư mục này lên GitHub. Nếu bật GitHub Pages cho nhánh main và thư mục root, truy cập đường dẫn <code>https://dtc245200747.github.io/baithuchanh/quan-ly-sinh-vien/</code>.</p><p><strong>Lưu ý:</strong> Đường dẫn chỉ hoạt động sau khi tải file lên và bật GitHub Pages.</p></section></main><footer>Bài thực hành Quản lý sinh viên</footer></body></html>
