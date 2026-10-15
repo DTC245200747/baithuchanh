@@ -1,15 +1,17 @@
-# Thực hành: Truy vấn dữ liệu với CSDL Quản lý sinh viên
+# FlashMart – Thực hành INNER JOIN, LEFT JOIN và Anti-Join
 
-## Nội dung
-File `select_query.sql` chứa 5 câu truy vấn theo yêu cầu CodeGym.
+## Các file
+- `flashmart_reports.sql`: tạo CSDL, bảng, dữ liệu mẫu và 2 báo cáo.
+- `join_analysis.md`: giải thích ngắn về COUNT và JOIN (dưới 150 từ).
+- `ai_prompt_log.md`: nhật ký tham khảo, cần đối chiếu với quá trình thực tế.
 
 ## Cách chạy
-1. Mở MySQL Workbench hoặc công cụ MySQL tương đương.
-2. Đảm bảo đã tạo database `QuanLySinhVien` và các bảng `Student`, `Class`, `Subject`, `Mark` từ bài trước, đồng thời đã nhập dữ liệu.
-3. Mở `select_query.sql`, thực thi lần lượt các câu lệnh.
-4. Chụp ảnh kết quả nếu giảng viên yêu cầu.
+1. Mở MySQL Workbench, kết nối MySQL 8+.
+2. Mở `flashmart_reports.sql` và chạy toàn bộ.
+3. Xem Result Grid của hai câu SELECT báo cáo.
 
-## Nộp GitHub
-Đưa hai file này vào thư mục bài tập trong repository của bạn và nộp đường dẫn GitHub tới thư mục hoặc file SQL.
+## Kết quả mong đợi
+Marketing: Alice = 2, Bob = 1, Charlie = 0 (3 dòng).
+Kho vận: `103 | Keyboard` (1 dòng).
 
-Tham khảo: https://github.com/codegym-vn/jwbd-2023-sql-student-management-select-query/tree/dev
+**Lưu ý:** Script dùng `DROP TABLE IF EXISTS` để tạo lại dữ liệu mẫu. Chỉ chạy trong môi trường thực hành, không dùng trên dữ liệu thật. Đây là kết quả dự kiến, chưa được kiểm chứng bằng MySQL thực tế.
