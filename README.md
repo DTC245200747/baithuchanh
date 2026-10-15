@@ -1,21 +1,10 @@
-# Thực hành: Tạo CSDL quản lý sinh viên
+# HealthSync – Khủng hoảng tại phòng khám
 
-Bài thực hành CodeGym sử dụng MySQL 8.0+.
+Bộ bài thực hành gồm:
+- `healthsync_db.sql`: thiết kế schema, dữ liệu mô phỏng, truy vấn đối soát, trigger kiểm tra trạng thái.
+- `consistency_report.md`: báo cáo Gap Analysis.
+- `ai_prompt_log.md`: nhật ký thảo luận AI tham khảo (cần xác nhận lại nội dung thực tế).
 
-## Nội dung
-- Tạo database `QuanLySinhVien`.
-- Tạo bảng `Class`, `Student`, `Subject`, `Mark`.
-- Đầy đủ PRIMARY KEY, AUTO_INCREMENT, FOREIGN KEY, NOT NULL, DEFAULT, CHECK, UNIQUE.
+**Chạy:** MySQL 8.0.16+ / MySQL Workbench. Mở và chạy toàn bộ `healthsync_db.sql`.
 
-## Hướng dẫn chạy
-1. Mở MySQL Workbench, kết nối MySQL.
-2. Mở `QuanLySinhVien.sql` và thực thi toàn bộ.
-3. Chạy `USE QuanLySinhVien; SHOW TABLES;` để kiểm tra.
-4. Chạy `SHOW CREATE TABLE Mark;` để kiểm tra các ràng buộc.
-
-## Quan hệ
-- `Class` (1) — (N) `Student`
-- `Student` (1) — (N) `Mark`
-- `Subject` (1) — (N) `Mark`
-
-Lưu ý: UNIQUE(SubID, StudentID) là theo đề, nên không lưu được nhiều lần thi cho cùng một cặp sinh viên–môn học.
+**Chú ý:** SQL xóa và tạo lại các bảng của database `healthsync_db`, chỉ chạy trong môi trường thử nghiệm, không chạy trên dữ liệu thật. Script chưa được thực thi trên máy chủ MySQL trong môi trường tạo file.
